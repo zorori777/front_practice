@@ -9,7 +9,6 @@ const Wrapper =　styled.div `
   a:hover {
     cursor : pointer;
   }
-
   .Wrap {
     display: flex;
     flex-direction: row;
@@ -30,6 +29,10 @@ const Wrapper =　styled.div `
     .left-content__box {
       margin-left: 12px;
       display: flex;
+
+      .fas.fa-caret-down {
+        margin-left: 10px;
+      }
     }
   }
 
