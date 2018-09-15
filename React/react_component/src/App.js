@@ -16,7 +16,7 @@ class App extends Component {
       }
       this.addTodo = this.addTodo.bind(this)
       this.resetTodo = this.resetTodo.bind(this)
-    }
+    }re
 
     addTodo(title) {
       const {

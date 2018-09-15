@@ -3,6 +3,7 @@ import qs from 'qs';
 
 const API_URL = 'http://shopping.yahooapis.jp/ShoppingWebService/V1/json/categoryRanking'
 
+const APP_ID = 'dj00aiZpPWkzU2kyVThTaWFZdSZzPWNvbnN1bWVyc2VjcmV0Jng9MmQ-'
 
 const startRequest = categoryId => ({
   type: 'START_REQUEST',

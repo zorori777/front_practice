@@ -1,111 +1,41 @@
-function AppModel(attrs) {
-  this.val = "";
-  this.attrs = {
-    required: attrs.required || false,
-    maxlength: attrs.maxlength || 8,
-    minlength: attrs.minlength || 4
-  };
-  this.listeners = {
-    valid: [],
-    invalid: []
-  };
+const fs = require('fs')
+// promise
+// function readFile_pr (fname) {
+//   return new Promise ((resolve) => {
+//     fs.readFile(fname, 'utf-8', (err, s) => {
+//       resolve(s)
+//     })
+//   })
+// }
+
+// readFile_pr('a.text')
+// .then((text) => {
+//   console.log('a.textを読みました', text)
+//   return readFile_pr('b.text')
+// })
+// .then((text) => {
+//   console.log('b.textを読みました', text)
+//   return readFile_pr('c.text')
+// })
+// .then((text) => {
+//   console.log('c.textを読みました')
+// })
+
+function readFileEx(fname) {
+  return new Promise((resolve, reject) => {
+    fs.readFile(fname, 'utf-8', (err, data) => {
+      resolve(data)
+    })
+  })
 }
 
-AppModel.prototype.set = function(val) {
-  if (this.val === val) return;
-  this.val = val;
-  this.validate();
-};
-
-AppModel.prototype.validate = function() {
-  var val;
-  this.errors = [];
-
-  for (var key in this.attrs) {
-    val = this.attrs[key];
-    if (val && !this[key](val)) this.errors.push(key);
-  }
-
-  this.trigger(!this.errors.length ? "valid" : "invalid");
-};
-
-AppModel.prototype.on = function(event, func) {
-  this.listeners[event].push(func);
-};
-
-AppModel.prototype.trigger = function(event) {
-  $.each(this.listeners[event], function() {
-    this();
-  });
-};
-
-AppModel.prototype.required = function() {
-  return this.val !== "";
-};
-
-AppModel.prototype.maxlength = function(num) {
-  return num >= this.val.length;
-};
-
-AppModel.prototype.minlength = function(num) {
-  return num <= this.val.length;
-};
-
-function AppView(el) {
-  this.initialize(el);
-  this.handleEvents();
+async function readAll () {
+  const a = await readFileEx('a.txt')
+  console.log(a)
+  const b = await readFileEx('b.txt')
+  console.log(b)
+  const c = await readFileEx('c.txt')
+  console.log(c)
 }
 
-AppView.prototype.initialize = function(el) {
-  this.$el = $(el);
-  this.$list = this.$el.next().children();
-
-  var obj = this.$el.data();
-
-  if (this.$el.prop("required")) {
-    obj["required"] = true;
-  }
-
-  this.model = new AppModel(obj);
-};
-
-AppView.prototype.handleEvents = function() {
-  var self = this;
-
-  this.$el.on("keyup", function(e) {
-    self.onKeyup(e);
-  });
-
-  this.model.on("valid", function() {
-    self.onValid();
-  });
-
-  this.model.on("invalid", function() {
-    self.onInvalid();
-  });
-
-};
-
-AppView.prototype.onKeyup = function(e) {
-  var $target = $(e.currentTarget);
-  this.model.set($target.val());
-};
-
-AppView.prototype.onValid = function() {
-  this.$el.removeClass("error");
-  this.$list.hide();
-};
-
-AppView.prototype.onInvalid = function() {
-  var self = this;
-  this.$el.addClass("error");
-  this.$list.hide();
-
-  $.each(this.model.errors, function(index, val) {
-    self.$list.filter("[data-error=\"" + val + "\"]").show();
-  });
-};
-
-$("input").each(function() {
-  new AppView(this);
-});
+readAll()
